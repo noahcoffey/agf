@@ -1,5 +1,6 @@
 use std::collections::HashMap;
-use std::fs;
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 
 use serde::Deserialize;
 use walkdir::WalkDir;
@@ -56,17 +57,13 @@ pub fn scan() -> Result<Vec<Session>, AgfError> {
             continue;
         }
 
-        let content = match fs::read_to_string(path) {
-            Ok(c) => c,
-            Err(_) => continue,
+        // Only the first line contains session_meta — no need to read the whole file.
+        let first_line = match read_first_line(path) {
+            Some(line) => line,
+            None => continue,
         };
 
-        let first_line = match content.lines().next() {
-            Some(line) if !line.trim().is_empty() => line.trim(),
-            _ => continue,
-        };
-
-        let meta: SessionMeta = match serde_json::from_str(first_line) {
+        let meta: SessionMeta = match serde_json::from_str(first_line.trim()) {
             Ok(m) => m,
             Err(_) => continue,
         };
@@ -123,21 +120,42 @@ pub fn scan() -> Result<Vec<Session>, AgfError> {
     Ok(sessions)
 }
 
+/// Read only the first non-empty line of a file without loading the rest.
+fn read_first_line(path: &std::path::Path) -> Option<String> {
+    let file = File::open(path).ok()?;
+    let mut reader = BufReader::new(file);
+    let mut line = String::new();
+    loop {
+        line.clear();
+        let n = reader.read_line(&mut line).ok()?;
+        if n == 0 {
+            return None;
+        }
+        if !line.trim().is_empty() {
+            return Some(line);
+        }
+    }
+}
+
 fn read_history_summaries(codex_dir: &std::path::Path) -> HashMap<String, Vec<String>> {
     let path = codex_dir.join("history.jsonl");
     let mut summaries: HashMap<String, Vec<(f64, String)>> = HashMap::new();
 
-    let content = match fs::read_to_string(&path) {
-        Ok(c) => c,
+    let file = match File::open(&path) {
+        Ok(f) => f,
         Err(_) => return HashMap::new(),
     };
 
-    for line in content.lines() {
-        let line = line.trim();
+    for line in BufReader::new(file).lines() {
+        let line = match line {
+            Ok(l) => l,
+            Err(_) => continue,
+        };
+        let line = line.trim().to_owned();
         if line.is_empty() {
             continue;
         }
-        let entry: HistoryEntry = match serde_json::from_str(line) {
+        let entry: HistoryEntry = match serde_json::from_str(&line) {
             Ok(e) => e,
             Err(_) => continue,
         };
