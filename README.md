@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/subinium/agf/actions/workflows/ci.yml/badge.svg)](https://github.com/subinium/agf/actions)
 [![Release](https://img.shields.io/github/v/release/subinium/agf?include_prereleases&sort=semver)](https://github.com/subinium/agf/releases)
+[![crates.io](https://img.shields.io/crates/v/agf.svg)](https://crates.io/crates/agf)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > A fast TUI to find, resume, and manage your AI coding agent sessions.
@@ -14,11 +15,14 @@ Built with [SuperLightTUI (SLT)](https://github.com/subinium/SuperLightTUI) — 
 ## Quick Start
 
 ```bash
+# Homebrew (macOS/Linux)
 brew install subinium/tap/agf
-agf setup
+
+# Cargo (any platform)
+cargo install agf
 ```
 
-Restart your shell. Then just type `agf`.
+Then run `agf setup` and restart your shell. Type `agf` to launch.
 
 ### Quick Resume (no TUI)
 
@@ -47,6 +51,9 @@ If you use AI coding agents, you've probably done this:
 - **Bulk delete** — `Ctrl+D` to multi-select and batch-delete sessions
 - **New session** — launch a new agent session with optional permission mode
 - **Quick resume** — `agf resume <query>` to skip the TUI and resume directly
+- **Unicode search** — Korean (한글) and CJK input supported
+- **Mouse support** — click to select sessions, scroll wheel navigation
+- **Resume mode picker** — Tab on Resume to choose permission/approval mode (yolo, plan, etc.)
 - **Auto-detection** — only shows agents installed on your system
 - **Git branch** — shows the current branch of each project's working directory
 - **Worktree support** — detects Claude Code `--worktree` sessions; shows worktree name in the list and parent branch in the detail view
@@ -137,9 +144,9 @@ agf setup
 
 </details>
 
-## Upgrading to v0.6
+## Upgrading
 
-v0.6 changes the shell integration method. After upgrading, run `agf setup` again (or restart your shell) to apply the new wrapper.
+After upgrading, run `agf setup` again (or restart your shell) to apply the latest shell wrapper.
 
 See [CHANGELOG.md](CHANGELOG.md) for full details.
 
