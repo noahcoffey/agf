@@ -92,10 +92,7 @@ impl Settings {
             existing.remove("pinned_sessions");
         }
         if self.show_recap {
-            existing.insert(
-                "show_recap".to_string(),
-                toml::Value::Boolean(true),
-            );
+            existing.insert("show_recap".to_string(), toml::Value::Boolean(true));
         } else {
             existing.remove("show_recap");
         }

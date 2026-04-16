@@ -875,7 +875,9 @@ fn ui_grouped_browse(ui: &mut slt::Context, app: &mut App) {
                                 total_width.saturating_sub(fixed_width + git_width + 2);
 
                             let summary_src = if app.show_recap {
-                                s.recap.as_deref().or(s.summaries.first().map(String::as_str))
+                                s.recap
+                                    .as_deref()
+                                    .or(s.summaries.first().map(String::as_str))
                             } else {
                                 s.summaries.first().map(String::as_str)
                             };
@@ -2154,7 +2156,10 @@ fn render_session_list(ui: &mut slt::Context, app: &App, bulk_mode: bool) {
                 slt::Style::new().fg(slt::Color::White).bg(bg)
             };
             let summary_text = if app.show_recap {
-                session.recap.as_deref().or(session.summaries.first().map(String::as_str))
+                session
+                    .recap
+                    .as_deref()
+                    .or(session.summaries.first().map(String::as_str))
             } else {
                 session.summaries.first().map(String::as_str)
             };
@@ -2188,7 +2193,10 @@ fn render_session_list(ui: &mut slt::Context, app: &App, bulk_mode: bool) {
                 .copied()
                 .unwrap_or(0);
             let summary_text = if app.show_recap && summary_offset == 0 {
-                session.recap.as_deref().or(session.summaries.first().map(String::as_str))
+                session
+                    .recap
+                    .as_deref()
+                    .or(session.summaries.first().map(String::as_str))
             } else {
                 session.summaries.get(summary_offset).map(String::as_str)
             };

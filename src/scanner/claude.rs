@@ -112,7 +112,10 @@ fn scan_session_metadata(claude_dir: &std::path::Path) -> HashMap<String, Sessio
                         .and_then(|t| t.as_str())
                         .unwrap_or("")
                         .to_string();
-                    if latest_recap_ts.as_deref().is_none_or(|prev| ts.as_str() > prev) {
+                    if latest_recap_ts
+                        .as_deref()
+                        .is_none_or(|prev| ts.as_str() > prev)
+                    {
                         if let Some(content) = val.get("content").and_then(|c| c.as_str()) {
                             // Strip the "(disable recaps in /config)" suffix
                             let clean = content
